@@ -2,10 +2,11 @@ package com.dalimao.mytaxi;
 
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 
+import okhttp3.Cache;
 import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -97,5 +98,40 @@ public class OkHttpTest  {
             e.printStackTrace();
         }
 
+    }
+
+
+    @Test
+    public void testCache(){
+
+        Cache cache = new Cache(new File("cache.cache"),1024*1024);
+
+        OkHttpClient client = new OkHttpClient.Builder().cache(cache).build();
+
+        Request request = new Request.Builder().url("http://httpbin.org/get").build();
+
+        try {
+            Response response = client.newCall(request).execute();
+
+            Response cacheControl = response.cacheResponse();
+
+            Response networkResponse = response.networkResponse();
+
+            if (cacheControl!=null){
+
+                System.out.println("response is from cache");
+            }
+            if (networkResponse !=null){
+
+                System.out.println("response is from network");
+            }
+
+            System.out.println(response.code() + response.body().string());
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+
+        }
     }
 }
