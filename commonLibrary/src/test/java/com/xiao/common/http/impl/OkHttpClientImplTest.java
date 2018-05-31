@@ -26,7 +26,6 @@ public class OkHttpClientImplTest {
         IRequest request = new BaseRequest( API.Config.getDomain()+API.TEST_GET );
         request.setBody("uid","hahaha");
         IResponse response = httpClient.get(request,false);
-
         System.out.println(response.getData());
     }
 
